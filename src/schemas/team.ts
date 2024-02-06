@@ -4,7 +4,7 @@ import { type CompleteUserOnTeam, RelatedUserOnTeamModel } from "./index";
 
 export const TeamModel = z.object({
   id: z.string(),
-  name: z.string().nullish(),
+  name: z.string(),
 });
 
 export interface CompleteTeam extends z.infer<typeof TeamModel> {
