@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { env } from "@/env";
 
+// eslint-disable-next-line no-undef
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
