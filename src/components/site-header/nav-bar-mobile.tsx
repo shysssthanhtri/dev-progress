@@ -7,6 +7,7 @@ import React from "react";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { appRoute } from "@/config/route";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +26,7 @@ export const NavBarMobile = () => {
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
         <MobileLink
-          href="/"
+          href={appRoute.home}
           className="flex items-center"
           onOpenChange={setOpen}
         >
