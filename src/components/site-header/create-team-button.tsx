@@ -1,6 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
@@ -24,9 +26,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TeamEntity } from "@/domain/entities/team";
+import { api as clientApi } from "@/trpc/react";
 
 type CreateTeamButtonProps = ButtonProps;
-export const CreateTeamButton = (props: CreateTeamButtonProps) => {
+export const CreateTeamButton = (buttonProps: CreateTeamButtonProps) => {
+  const router = useRouter();
   const [isDialogShow, setIsDialogShow] = React.useState(false);
 
   const form = useForm<CreateTeamForm>({
@@ -34,14 +38,21 @@ export const CreateTeamButton = (props: CreateTeamButtonProps) => {
     defaultValues: { name: "" },
   });
 
-  const onSubmit = (data: CreateTeamForm) => {
-    console.log({ data });
+  const createTeam = clientApi.team.createTeam.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      setIsDialogShow(false);
+      form.reset();
+    },
+  });
+  const onSubmit = async (data: CreateTeamForm) => {
+    createTeam.mutate(data);
   };
 
   return (
     <Dialog open={isDialogShow} onOpenChange={setIsDialogShow}>
       <DialogTrigger asChild>
-        <Button {...props} variant="outline">
+        <Button {...buttonProps} variant="outline">
           Create new team
         </Button>
       </DialogTrigger>
@@ -58,7 +69,7 @@ export const CreateTeamButton = (props: CreateTeamButtonProps) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Team name</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Your team name" {...field} />
                     </FormControl>
@@ -66,7 +77,12 @@ export const CreateTeamButton = (props: CreateTeamButtonProps) => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Create team</Button>
+              <Button type="submit" disabled={createTeam.isLoading}>
+                {createTeam.isLoading && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Create team
+              </Button>
             </form>
           </Form>
         </DialogHeader>
