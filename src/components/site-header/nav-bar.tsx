@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 import { Icons } from "@/components/icons";
+import { TeamSwitcher } from "@/components/site-header/team-switcher";
 import { appRoute } from "@/config/route";
 import { siteConfig } from "@/config/site";
 
@@ -14,6 +15,7 @@ export const NavBar = () => {
           {siteConfig.name}
         </span>
       </Link>
+      <TeamSwitcher />
     </div>
   );
 };
